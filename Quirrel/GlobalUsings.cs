@@ -1,0 +1,10 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using Quirrel;
+global using Serilog;
+global using Serilog.Events;
+global using Quirrel.Services;
+global using Google.Apis.Drive;
