@@ -20,21 +20,7 @@ namespace Quirrel.Utils
 
         public void ListGoogleDrive()
         {
-
-            using (var stream = new FileStream(configuration.GetSection("UserConfig")["PathToCredentials"], FileMode.Open, FileAccess.Read))
-            {
-                string tokenPath = "token.json";
-                string[] Scopes = { DriveService.Scope.DriveReadonly };
-
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.FromStream(stream).Secrets,
-                    Scopes,
-                    "Quirrel",
-                    CancellationToken.None,
-                    new FileDataStore(tokenPath, true)).Result;
-
-                logger.LogInformation("Credential file saved to: " + tokenPath);
-            }
+            if (credential == null) GetAuthCredentials();
 
             // Create Drive API service.
             var service = new DriveService(new BaseClientService.Initializer()
@@ -70,6 +56,24 @@ namespace Quirrel.Utils
                 Console.WriteLine("No files found.");
             }
 
+        }
+
+        private void GetAuthCredentials()
+        {
+            using (var stream = new FileStream(configuration.GetSection("UserConfig")["PathToCredentials"], FileMode.Open, FileAccess.Read))
+            {
+                string tokenPath = "token.json";
+                string[] Scopes = { DriveService.Scope.DriveReadonly };
+
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                    Scopes,
+                    "Quirrel",
+                    CancellationToken.None,
+                    new FileDataStore(tokenPath, true)).Result;
+
+                logger.LogInformation("Credential file saved to: " + tokenPath);
+            }
         }
     }
 }
