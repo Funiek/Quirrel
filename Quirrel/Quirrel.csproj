@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="Persistence\" />
   </ItemGroup>
 </Project>
