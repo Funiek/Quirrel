@@ -1,7 +1,5 @@
-using Quirrel;
+using Quirrel.Interfaces;
 using ILoggerProvider = Quirrel.Interfaces.ILoggerProvider;
-
-
 
 try
 {
@@ -12,8 +10,9 @@ try
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
+        services.AddLogging(configure => configure.AddSerilog())
+                .AddTransient<IGoogleApiHandler, GoogleApiHandler>();
     })
-    .UseSerilog()
     .Build();
 
     await host.RunAsync();

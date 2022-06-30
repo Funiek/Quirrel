@@ -1,32 +1,37 @@
+using Quirrel.Utils;
+
 namespace Quirrel
 {
     public class Worker : BackgroundService
     {
         private readonly IConfiguration configuration;
         private readonly ILogger<Worker> logger;
-        public Worker(IConfiguration configuration, ILogger<Worker> logger)
+        private readonly IServiceProvider serviceProvider;
+        public Worker(IConfiguration configuration, ILogger<Worker> logger, IServiceProvider serviceProvider)
         {
             this.configuration = configuration;
             this.logger = logger;
+            this.serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            logger.LogInformation("Worker started...");
-
-            bool flag = false;
-            while (!stoppingToken.IsCancellationRequested)
+            var GoogleApiHandler = ActivatorUtilities.CreateInstance<GoogleApiHandler>(serviceProvider);
+            logger.LogInformation($"Worker started... {DateTime.Now}");
+            try
             {
-                Console.WriteLine(configuration.GetSection("UserConfig")["Test"]);
-                if (!flag)
+                while (!stoppingToken.IsCancellationRequested)
                 {
-                    //googleApiHandler.ListGoogleDrive(configuration);
-                    flag = true;
+                    GoogleApiHandler.ListGoogleDrive();
+                    await Task.Delay(2000, stoppingToken);
                 }
-
-                await Task.Delay(2000, stoppingToken);
-
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
         }
     }
 }

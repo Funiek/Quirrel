@@ -10,7 +10,7 @@ namespace Quirrel.Services
         {
             Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .MinimumLevel.Override("Microsoft",LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();

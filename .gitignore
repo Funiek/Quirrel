@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Project related
 *[Pp]ersistence/credentials.json
+/Quirrel/Persistence/credentials.json
